@@ -49,6 +49,7 @@
     {:db (assoc db
                 :s '()
                 :running? true
+                :lost? false
                 :score 0
                 :n 2)
      :next-turn true}))

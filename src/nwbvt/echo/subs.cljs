@@ -35,5 +35,9 @@
 (rf/reg-sub
   ::fade?
   (fn [db]
-    (:fade? db))
-  )
+    (:fade? db)))
+
+(rf/reg-sub
+  ::clicked?
+  (fn [db]
+    (:clicked? db)))

@@ -13,10 +13,19 @@
        [:h3 "Final score: " @(rf/subscribe [::subs/score])]])
    (if @(rf/subscribe [::subs/running?])
      [:div.game
-      (let [score (rf/subscribe [::subs/score])]
-        [:div.score>h3 "Score:" @score])
-      (let [n (rf/subscribe [::subs/n])]
-        [:div.n>h2 "N:" @n])
+      [:div
+       (let [n (rf/subscribe [::subs/n])]
+         [:h2 "N:" @n])
+       (let [score (rf/subscribe [::subs/score])]
+         [:h3 "Score:" @score])]
+
+      
       (let [cur (rf/subscribe [::subs/cur])]
-        [:div.gameValue>h1 {:class (if @(rf/subscribe [::subs/fade?]) "faded" "new") :onClick #(rf/dispatch [::events/click])} @cur])]
+        [:div#gameValue>h1 {:class (cond
+                                     @(rf/subscribe [::subs/clicked?]) "clicked"
+                                     @(rf/subscribe [::subs/fade?]) "faded"
+                                     :default "new")
+                            :onClick #(rf/dispatch [::events/click])}
+         (or @cur "Get Ready!")
+         ])]
      [:button {:onClick #(rf/dispatch [::events/start])} "Start" ]) ])
