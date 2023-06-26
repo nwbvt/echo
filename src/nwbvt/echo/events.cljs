@@ -56,4 +56,4 @@
   :next-turn
   (fn [continue?]
     (if continue?
-      (js/setTimeout #(rf/dispatch [::tick]) 3000))))
+      (js/setTimeout #(rf/dispatch [::tick]) (:period config/env)))))
