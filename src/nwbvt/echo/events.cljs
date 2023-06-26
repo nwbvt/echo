@@ -28,7 +28,8 @@
                 :lost? lost?
                 :running? (not lost?)
                 :n (if advance? (inc n) n)
-                :clicked? false)
+                :clicked? false
+                :fade? false)
      :next-turn (not lost?)}))
 
 (rf/reg-event-fx
@@ -52,8 +53,15 @@
                 :n 2)
      :next-turn true}))
 
+(rf/reg-event-db
+  ::fade
+  (fn [db _]
+    (assoc db :fade? true)))
+
 (rf/reg-fx
   :next-turn
   (fn [continue?]
     (if continue?
-      (js/setTimeout #(rf/dispatch [::tick]) (:period config/env)))))
+      (do
+        (js/setTimeout #(rf/dispatch [::fade]) 500)
+        (js/setTimeout #(rf/dispatch [::tick]) (:period config/env))))))

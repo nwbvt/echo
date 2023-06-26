@@ -18,5 +18,5 @@
       (let [n (rf/subscribe [::subs/n])]
         [:div.n>h2 "N:" @n])
       (let [cur (rf/subscribe [::subs/cur])]
-        [:div.gameValue>h1 {:onClick #(rf/dispatch [::events/click])} @cur])]
+        [:div.gameValue>h1 {:class (if @(rf/subscribe [::subs/fade?]) "faded" "new") :onClick #(rf/dispatch [::events/click])} @cur])]
      [:button {:onClick #(rf/dispatch [::events/start])} "Start" ]) ])

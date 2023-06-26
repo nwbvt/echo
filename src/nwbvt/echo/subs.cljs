@@ -31,3 +31,9 @@
   ::running?
   (fn [db]
     (:running? db)))
+
+(rf/reg-sub
+  ::fade?
+  (fn [db]
+    (:fade? db))
+  )

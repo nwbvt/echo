@@ -1,0 +1,10 @@
+div.gameValue h1.new {
+  font-size: 4em;
+  opacity: 1;
+}
+
+div.gameValue h1.faded {
+  font-size: 4em;
+  opacity: 0.5;
+  transition: opacity 1s linear;
+}
