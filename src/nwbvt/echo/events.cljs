@@ -27,6 +27,7 @@
                 :score new-score
                 :lost? lost?
                 :running? (not lost?)
+                :level-change? advance?
                 :n (if advance? (inc n) n)
                 :clicked? false
                 :fade? false)

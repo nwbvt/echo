@@ -17,15 +17,19 @@
         [:h3 "Final score: " @(rf/subscribe [::subs/score])]]]])
    (if @(rf/subscribe [::subs/running?])
      [:div#game
-      [:div.row.justify-content-around
+      [:div.row.justify-content-center
        [:div.col-2
-        [:label.col-form-label {:for "n"} "N"]
+        [:div [:label.col-form-label {:for "n"} "N"]]
         (let [n (rf/subscribe [::subs/n])]
-          [:div.form-control @n])]
+          [:div {:class (cond
+                          @(rf/subscribe [::subs/level-change?]) "flash form-control"
+                          :default "form-control")} @n])]
        [:div.col-2
         [:label.col-form-label {:for "score"} "Score"]
         (let [score (rf/subscribe [::subs/score])]
-          [:div.form-control @score])]]
+          [:div {:class (cond
+                          @(rf/subscribe [::subs/scored?]) "flash form-control"
+                          :default "form-control")} @score])]]
       (let [cur (rf/subscribe [::subs/cur])]
         [:div.row.justify-content-center
          [:div#gameValue.col-6.btn.btn>h1 {:class (cond

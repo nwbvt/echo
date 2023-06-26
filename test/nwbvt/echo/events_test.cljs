@@ -19,10 +19,12 @@
                    :db
                    :s
                    rest)))
-        (is (= {:n 2 :clicked? false :score 3 :lost? false}
+        (is (= {:n 2 :clicked? false :score 3 :lost? false
+                :scored? false :level-change? false}
                (-> next-state
                    :db
-                   (select-keys [:n :clicked? :score :lost?]))))
+                   (select-keys [:n :clicked? :score :lost?
+                                 :scored? :level-change?]))))
         (is (true? (-> next-state :next-turn)))))
     (testing "Clicked, no echo"
       (let [next-state (tick
@@ -33,10 +35,12 @@
                    :db
                    :s
                    rest)))
-        (is (= {:n 2 :clicked? false :score 3 :lost? true}
+        (is (= {:n 2 :clicked? false :score 3 :lost? true
+                :scored? false :level-change? false }
                (-> next-state
                    :db
-                   (select-keys [:n :clicked? :score :lost?]))))
+                   (select-keys [:n :clicked? :score :lost?
+                                 :scored? :level-change?]))))
         (is (false? (-> next-state :next-turn)))))
     (testing "No click, echo"
       (let [next-state (tick
@@ -47,10 +51,12 @@
                    :db
                    :s
                    rest)))
-        (is (= {:n 2 :clicked? false :score 3 :lost? true}
+        (is (= {:n 2 :clicked? false :score 3 :lost? true
+                :scored? false :level-change? false}
                (-> next-state
                    :db
-                   (select-keys [:n :clicked? :score :lost?]))))
+                   (select-keys [:n :clicked? :score :lost?
+                                 :scored? :level-change?]))))
         (is (false? (-> next-state :next-turn)))))
     (testing "Clicked, echo"
       (let [next-state (tick
@@ -63,10 +69,10 @@
                    :db
                    :s
                    rest)))
-        (is (= {:n 2 :clicked? false :score 4 :lost? false :scored? true}
+        (is (= {:n 2 :clicked? false :score 4 :lost? false :scored? true :level-change? false}
                (-> next-state
                    :db
-                   (select-keys [:n :clicked? :score :lost? :scored?]))))
+                   (select-keys [:n :clicked? :score :lost? :scored? :level-change?]))))
         (is (true? (-> next-state :next-turn)))))
     (testing "Advanced"
       (let [next-state (tick
@@ -80,8 +86,8 @@
                    :db
                    :s
                    rest)))
-        (is (= {:n 3 :clicked? false :score 10 :lost? false :scored? true}
+        (is (= {:n 3 :clicked? false :score 10 :lost? false :scored? true :level-change? true}
                (-> next-state
                    :db
-                   (select-keys [:n :clicked? :score :lost? :scored?]))))
+                   (select-keys [:n :clicked? :score :lost? :scored? :level-change?]))))
         (is (true? (-> next-state :next-turn)))))))

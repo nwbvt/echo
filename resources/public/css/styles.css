@@ -22,3 +22,11 @@ div#gameValue h1.clicked {
   opacity: 1;
   color: var(--bs-emphasis-color);
 }
+
+div.flash
+{
+  color: var(--bs-emphasis-color);
+  font-weight: bold;
+  transition: color 1s linear;
+  transition: font-weight 1s linear;
+}

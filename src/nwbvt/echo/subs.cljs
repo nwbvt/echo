@@ -41,3 +41,13 @@
   ::clicked?
   (fn [db]
     (:clicked? db)))
+
+(rf/reg-sub
+  ::scored?
+  (fn [db]
+    (:scored? db)))
+
+(rf/reg-sub
+  ::level-change?
+  (fn [db]
+    (:level-change? db)))
