@@ -21,16 +21,16 @@
        [:div.col-2
         [:label.col-form-label {:for "n"} "N"]
         (let [n (rf/subscribe [::subs/n])]
-          [:input#n.form-control {:readonly true :value @n}])]
+          [:div.form-control @n])]
        [:div.col-2
         [:label.col-form-label {:for "score"} "Score"]
         (let [score (rf/subscribe [::subs/score])]
-          [:input#score.form-control {:readonly true :value @score}])]]
+          [:div.form-control @score])]]
       (let [cur (rf/subscribe [::subs/cur])]
         [:div.row.justify-content-center
          [:div#gameValue.col-6.btn.btn>h1 {:class (cond
                                                     @(rf/subscribe [::subs/fade?]) "faded"
                                                     :default "new")
                                            :onClick #(rf/dispatch [::events/click])}
-          [:h1 (or @cur "Get Ready!")]]])]
+          (or @cur "Get Ready!")]])]
      [:button.btn.btn-primary {:onClick #(rf/dispatch [::events/start])} "Start" ]) ])
