@@ -22,7 +22,12 @@
   (fn [db]
     (:score db)))
 
-(comment (rf/reg-sub
+(rf/reg-sub
   ::lost?
   (fn [db]
-    (:lost? db))))
+    (:lost? db)))
+
+(rf/reg-sub
+  ::running?
+  (fn [db]
+    (:running? db)))

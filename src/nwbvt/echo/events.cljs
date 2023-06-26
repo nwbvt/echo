@@ -20,18 +20,21 @@
         scored? (and clicked? echo?)
         new-seq (conj s (game/choose-next s options n is-n is-recent))
         new-score (if scored? (inc score) score)
-        advance? (and scored? (zero? (mod new-score points-per-level)))]
-    (assoc db
-           :s new-seq
-           :scored? scored?
-           :score new-score
-           :lost? (or (and clicked? (not echo?)) (and (not clicked?) echo?))
-           :n (if advance? (inc n) n)
-           :clicked? false)))
+        advance? (and scored? (zero? (mod new-score points-per-level)))
+        lost? (or (and clicked? (not echo?)) (and (not clicked?) echo?))]
+    {:db (assoc db
+                :s new-seq
+                :scored? scored?
+                :score new-score
+                :lost? lost?
+                :running? (not lost?)
+                :n (if advance? (inc n) n)
+                :clicked? false)
+     :next-turn (not lost?)}))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::tick
-  (fn [db _]
+  (fn [{:keys [db]} event]
     (tick db config/env)))
 
 (rf/reg-event-db
@@ -39,3 +42,12 @@
   (fn [db _]
     (assoc db
            :clicked? true)))
+
+(rf/reg-event-db
+  ::start
+  (fn [db _]
+    (assoc db
+           :s '()
+           :running? true
+           :score 0
+           :n 2)))
