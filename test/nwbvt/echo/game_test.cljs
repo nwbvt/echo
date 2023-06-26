@@ -22,7 +22,12 @@
           s '(1)
           n 2
           results (for [_ (range 10000)] (game/choose-next s options n 0.1 0.4))]
-      (is (= (set (range 10)) (set results))))))
+      (is (= (set (range 10)) (set results)))))
+  (testing "Repeats"
+    (let [options (range 100)
+          s `(1 1 1 1)
+          n 2]
+      (is (int? (game/choose-next s options n 0.1 0.4))))))
 
 (deftest test-is-echo?
   (testing "positives"

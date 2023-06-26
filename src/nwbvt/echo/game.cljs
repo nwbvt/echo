@@ -6,10 +6,11 @@
   [s options n is-n recent]
   (if (< n (count s))
     (let [r (rand 1)
-          nback (nth s (dec n))]
+          nback (nth s (dec n))
+          near (remove #(= % nback) (take (dec (* 2 n)) s))]
       (cond
         (<= r is-n) nback
-        (<= r (+ is-n recent)) (rand-nth (remove #(= % nback) (take (dec (* 2 n)) s)))
+        (and (<= r (+ is-n recent)) (< 0 (count near))) (rand-nth near)
         :default (rand-nth (remove #(= % nback) options))))
     (rand-nth options)))
 

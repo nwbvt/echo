@@ -4,8 +4,7 @@
    [nwbvt.echo.db :as db]
    [nwbvt.echo.config :as config]
    [nwbvt.echo.game :as game]
-   [day8.re-frame.tracing :refer-macros [fn-traced]]
-   ))
+   [day8.re-frame.tracing :refer-macros [fn-traced]]))
 
 (rf/reg-event-db
  ::initialize-db
@@ -43,11 +42,18 @@
     (assoc db
            :clicked? true)))
 
-(rf/reg-event-db
+(rf/reg-event-fx
   ::start
-  (fn [db _]
-    (assoc db
-           :s '()
-           :running? true
-           :score 0
-           :n 2)))
+  (fn [{:keys [db]} _]
+    {:db (assoc db
+                :s '()
+                :running? true
+                :score 0
+                :n 2)
+     :next-turn true}))
+
+(rf/reg-fx
+  :next-turn
+  (fn [continue?]
+    (if continue?
+      (js/setTimeout #(rf/dispatch [::tick]) 3000))))

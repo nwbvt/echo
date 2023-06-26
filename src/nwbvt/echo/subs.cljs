@@ -15,7 +15,7 @@
 (rf/reg-sub
   ::cur
   (fn [db]
-    (first (:seq db))))
+    (first (:s db))))
 
 (rf/reg-sub
   ::score

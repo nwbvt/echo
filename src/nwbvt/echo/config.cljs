@@ -4,9 +4,9 @@
   ^boolean goog.DEBUG)
 
 (def defaults
-  {:is-n? 0.1
-   :is-recent? 0.4
-   :options (range 10)
+  {:is-n 0.2
+   :is-recent 0.4
+   :options (range 100)
    :points-per-level 10})
 
 (comment (defstate env
