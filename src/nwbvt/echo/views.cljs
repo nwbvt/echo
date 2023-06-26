@@ -5,27 +5,32 @@
    [nwbvt.echo.events :as events]))
 
 (defn main-panel []
-  [:div#main
+  [:div#main.container.text-center
    [:h1.title "Echo"]
    (if @(rf/subscribe [::subs/lost?])
-     [:div.lost
-       [:h2 "Sorry you lose"]
-       [:h3 "Final score: " @(rf/subscribe [::subs/score])]])
+     [:div#lost
+      [:div.row
+       [:div.col
+        [:h2 "Sorry you lose"]]]  
+      [:div.row
+       [:div.col
+        [:h3 "Final score: " @(rf/subscribe [::subs/score])]]]])
    (if @(rf/subscribe [::subs/running?])
-     [:div.game
-      [:div
-       (let [n (rf/subscribe [::subs/n])]
-         [:h2 "N:" @n])
-       (let [score (rf/subscribe [::subs/score])]
-         [:h3 "Score:" @score])]
-
-      
+     [:div#game
+      [:div.row.justify-content-around
+       [:div.col-2
+        [:label.col-form-label {:for "n"} "N"]
+        (let [n (rf/subscribe [::subs/n])]
+          [:input#n.form-control {:readonly true :value @n}])]
+       [:div.col-2
+        [:label.col-form-label {:for "score"} "Score"]
+        (let [score (rf/subscribe [::subs/score])]
+          [:input#score.form-control {:readonly true :value @score}])]]
       (let [cur (rf/subscribe [::subs/cur])]
-        [:div#gameValue>h1 {:class (cond
-                                     @(rf/subscribe [::subs/clicked?]) "clicked"
-                                     @(rf/subscribe [::subs/fade?]) "faded"
-                                     :default "new")
-                            :onClick #(rf/dispatch [::events/click])}
-         (or @cur "Get Ready!")
-         ])]
-     [:button {:onClick #(rf/dispatch [::events/start])} "Start" ]) ])
+        [:div.row.justify-content-center
+         [:div#gameValue.col-6.btn.btn>h1 {:class (cond
+                                                    @(rf/subscribe [::subs/fade?]) "faded"
+                                                    :default "new")
+                                           :onClick #(rf/dispatch [::events/click])}
+          [:h1 (or @cur "Get Ready!")]]])]
+     [:button.btn.btn-primary {:onClick #(rf/dispatch [::events/start])} "Start" ]) ])

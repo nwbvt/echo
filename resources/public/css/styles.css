@@ -1,9 +1,9 @@
 :root {
-  --dark-color: #A62F03;
-  --bg-color: #260101;
-  --light-color: #F28A2E;
-  --main-color: #F27127;
-  --alert-color: #AB0E21;
+  --bs-body-color: #F27127; 
+  --bs-body-bg: #260101;
+  --bs-secondary-color: #F28A2E;
+  --bs-border-color: #A62F03;
+  --bs-emphasis-color: #AB0E21;
 }
 
 div#gameValue h1.new {
@@ -20,19 +20,5 @@ div#gameValue h1.faded {
 div#gameValue h1.clicked {
   font-size: 4em;
   opacity: 1;
-  color: var(--alert-color);
-}
-
-body {
-  background-color: var(--bg-color);
-}
-
-div#main {
-  text-align: center;
-  color: var(--main-color);
-}
-
-button {
-  background-color: var(--light-color);
-  color: var(--dark-color);
+  color: var(--bs-emphasis-color);
 }
