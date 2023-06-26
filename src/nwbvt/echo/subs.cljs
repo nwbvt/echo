@@ -1,8 +1,28 @@
 (ns nwbvt.echo.subs
   (:require
-   [re-frame.core :as re-frame]))
+   [re-frame.core :as rf]))
 
-(re-frame/reg-sub
- ::name
+(rf/reg-sub
+  ::name
+  (fn [db]
+    (:name db)))
+
+(rf/reg-sub
+ ::n
  (fn [db]
-   (:name db)))
+   (:n db)))
+
+(rf/reg-sub
+  ::cur
+  (fn [db]
+    (first (:seq db))))
+
+(rf/reg-sub
+  ::score
+  (fn [db]
+    (:score db)))
+
+(comment (rf/reg-sub
+  ::lost?
+  (fn [db]
+    (:lost? db))))

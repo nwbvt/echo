@@ -1,12 +1,13 @@
 (ns nwbvt.echo.events
   (:require
-   [re-frame.core :as re-frame]
+   [re-frame.core :as rf]
    [nwbvt.echo.db :as db]
+   [nwbvt.echo.config :as config]
    [nwbvt.echo.game :as game]
    [day8.re-frame.tracing :refer-macros [fn-traced]]
    ))
 
-(re-frame/reg-event-db
+(rf/reg-event-db
  ::initialize-db
  (fn-traced [_ _]
    db/default-db))
@@ -27,3 +28,14 @@
            :lost? (or (and clicked? (not echo?)) (and (not clicked?) echo?))
            :n (if advance? (inc n) n)
            :clicked? false)))
+
+(rf/reg-event-db
+  ::tick
+  (fn [db _]
+    (tick db config/env)))
+
+(rf/reg-event-db
+  ::click
+  (fn [db _]
+    (assoc db
+           :clicked? true)))
