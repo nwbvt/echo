@@ -7,7 +7,7 @@
   (if (< n (count s))
     (let [r (rand 1)
           nback (nth s (dec n))
-          near (remove #(= % nback) (take (dec (* 2 n)) s))]
+          near (remove #(= % nback) (take (* 2 n) s))]
       (cond
         (<= r is-n) nback
         (and (<= r (+ is-n recent)) (< 0 (count near))) (rand-nth near)

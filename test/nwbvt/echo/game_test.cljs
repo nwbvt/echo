@@ -8,15 +8,18 @@
     (let [options (range 101)
           s '(0 1 2 3 4 5)
           n 2
-          results (for [_ (range 100000)] (game/choose-next s options n 0.1 0.4))
+          results (for [_ (range 100004)] (game/choose-next s options n 0.1 0.6))
           by-result (frequencies results)]
       ;; Expected distribution
       ;; 10% - 1, 10000 times
-      ;; 40% - one of 0, 2 or 20% each, 20000 times
-      ;; 50% - 0, 2-100, or 0.5% each, 500 times
+      ;; 60% - one of 0, 2, 3 or 20% each, 20000 times
+      ;; 30% - 0, 4-104, or 0.3% each, 300 times
       (is (spec/int-in-range? 9000 11000 (by-result 1)))
       (is (spec/int-in-range? 19500 21500 (by-result 0)))
-      (is (spec/int-in-range? 19500 21500 (by-result 2)))))
+      (is (spec/int-in-range? 19500 21500 (by-result 2)))
+      (is (spec/int-in-range? 19500 21500 (by-result 3)))
+      (is (spec/int-in-range? 200 400 (by-result 4)))
+      ))
   (testing "Early sequences"
     (let [options (range 10)
           s '(1)
