@@ -13,36 +13,63 @@
 
 (defn tick
   "Perform a tick"
-  [{:keys [s n clicked? score] :as db} 
-   {:keys [is-n is-recent options points-per-level]}]
+  [{:keys [s n scored?] :as db}
+   {:keys [is-n is-recent options period]}]
   (let [echo? (game/is-echo? s n)
-        scored? (and clicked? echo?)
         new-seq (conj s (game/choose-next s options n is-n is-recent))
-        new-score (if scored? (inc score) score)
-        advance? (and scored? (zero? (mod new-score points-per-level)))
-        lost? (or (and clicked? (not echo?)) (and (not clicked?) echo?))]
+        lost? (and (not scored?) echo?)]
     {:db (assoc db
                 :s new-seq
-                :scored? scored?
-                :score new-score
-                :lost? lost?
-                :running? (not lost?)
-                :level-change? advance?
-                :n (if advance? (inc n) n)
                 :clicked? false
+                :scored? false
                 :fade? false)
-     :next-turn (not lost?)}))
+     :fx [[:dispatch-later {:ms 500 :dispatch [::fade]}]
+          (if lost?
+            [:dispatch [::game-over]]
+            [:dispatch-later {:ms period :dispatch [::tick]}]
+            )]}))
 
 (rf/reg-event-fx
   ::tick
   (fn [{:keys [db]} event]
     (tick db config/env)))
 
-(rf/reg-event-db
+(defn click
+  [{:keys [s n]}]
+  {:dispatch [(if (game/is-echo? s n)
+                ::score
+                ::game-over)]})
+
+(rf/reg-event-fx
   ::click
-  (fn [db _]
-    (assoc db
-           :clicked? true)))
+  (fn [{:keys [db]} event]
+    (click db)))
+
+(defn score
+  [{:keys [score] :as db}
+   {:keys [points-per-level]}]
+  (let [new-score (inc score)]
+      {:db (assoc db
+                  :scored? true
+                  :score (inc score))
+       :fx [(if (zero? (mod new-score points-per-level))
+              [:dispatch [::advance]])
+            [:dispatch [::flash :score]]]}))
+
+(rf/reg-event-fx
+  ::score
+  (fn [{db :db} event]
+    (score db config/env)))
+
+(defn advance
+  [{:keys [n] :as db}]
+  {:db (assoc db :n (inc n))
+   :dispatch [::flash :n]})
+
+(rf/reg-event-fx
+  ::advance
+  (fn [{db :db} event]
+    (advance db)))
 
 (rf/reg-event-fx
   ::start
@@ -52,18 +79,33 @@
                 :running? true
                 :lost? false
                 :score 0
+                :fade? false
                 :n 2)
-     :next-turn true}))
+     :dispatch-later {:ms (:period config/env) :dispatch [::tick]}}))
+
+(rf/reg-event-fx
+  ::flash
+  (fn [{{:keys [flash] :as db} :db} [_ to-flash]]
+    {:db (assoc db :flash
+                (assoc flash to-flash true))
+     :dispatch-later {:ms 1000 :dispatch [::unflash to-flash]}}  ))
+
+(rf/reg-event-db
+  ::unflash
+  (fn [{:keys [flash] :as db} [_ to-flash]]
+    (assoc db :flash
+           (assoc flash to-flash false))))
+
+(rf/reg-event-db
+  ::game-over
+  (fn [db _]
+    (assoc db
+           :running? false
+           :lost? true)))
 
 (rf/reg-event-db
   ::fade
   (fn [db _]
     (assoc db :fade? true)))
 
-(rf/reg-fx
-  :next-turn
-  (fn [continue?]
-    (if continue?
-      (do
-        (js/setTimeout #(rf/dispatch [::fade]) 500)
-        (js/setTimeout #(rf/dispatch [::tick]) (:period config/env))))))
+

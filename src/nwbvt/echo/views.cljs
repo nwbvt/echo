@@ -22,13 +22,13 @@
         [:div [:label.col-form-label {:for "n"} "N"]]
         (let [n (rf/subscribe [::subs/n])]
           [:div {:class (cond
-                          @(rf/subscribe [::subs/level-change?]) "flash form-control"
+                          @(rf/subscribe [::subs/flash-n?]) "flash form-control"
                           :default "form-control")} @n])]
        [:div.col-2
         [:label.col-form-label {:for "score"} "Score"]
         (let [score (rf/subscribe [::subs/score])]
           [:div {:class (cond
-                          @(rf/subscribe [::subs/scored?]) "flash form-control"
+                          @(rf/subscribe [::subs/flash-score?]) "flash form-control"
                           :default "form-control")} @score])]]
       (let [cur (rf/subscribe [::subs/cur])]
         [:div.row.justify-content-center

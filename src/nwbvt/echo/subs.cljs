@@ -43,11 +43,11 @@
     (:clicked? db)))
 
 (rf/reg-sub
-  ::scored?
+  ::flash-score?
   (fn [db]
-    (:scored? db)))
+    (:score (:flash db))))
 
 (rf/reg-sub
-  ::level-change?
+  ::flash-n?
   (fn [db]
-    (:level-change? db)))
+    (:n (:flash db))))
