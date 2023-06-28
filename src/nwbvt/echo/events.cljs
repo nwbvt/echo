@@ -13,11 +13,13 @@
 
 (defn tick
   "Perform a tick"
-  [{:keys [s n scored?] :as db}
-   {:keys [is-n is-recent options period]}]
-  (let [echo? (game/is-echo? s n)
-        new-seq (conj s (game/choose-next s options n is-n is-recent))
-        lost? (and (not scored?) echo?)]
+  [{:keys [s n scored? running? game-id] :as db}
+   {:keys [is-n is-recent options period]}
+   game]
+  (if (and running? (= game game-id))
+    (let [echo? (game/is-echo? s n)
+          new-seq (conj s (game/choose-next s options n is-n is-recent))
+          lost? (and (not scored?) echo?)]
     {:db (assoc db
                 :s new-seq
                 :clicked? false
@@ -26,13 +28,13 @@
      :fx [[:dispatch-later {:ms 500 :dispatch [::fade]}]
           (if lost?
             [:dispatch [::game-over]]
-            [:dispatch-later {:ms period :dispatch [::tick]}]
-            )]}))
+            [:dispatch-later {:ms period :dispatch [::tick game-id]}]
+            )]})))
 
 (rf/reg-event-fx
   ::tick
-  (fn [{:keys [db]} event]
-    (tick db config/env)))
+  (fn [{:keys [db]} [_ game-id]]
+    (tick db config/env game-id)))
 
 (defn click
   [{:keys [s n]}]
@@ -74,14 +76,16 @@
 (rf/reg-event-fx
   ::start
   (fn [{:keys [db]} _]
-    {:db (assoc db
-                :s '()
-                :running? true
-                :lost? false
-                :score 0
-                :fade? false
-                :n 2)
-     :dispatch-later {:ms (:period config/env) :dispatch [::tick]}}))
+    (let [game-id (random-uuid)]
+      {:db (assoc db
+                  :s '()
+                  :running? true
+                  :game-id game-id
+                  :lost? false
+                  :score 0
+                  :fade? false
+                  :n 2)
+       :dispatch-later {:ms (:period config/env) :dispatch [::tick game-id]}})))
 
 (rf/reg-event-fx
   ::flash
