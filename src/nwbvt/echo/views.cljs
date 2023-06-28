@@ -6,7 +6,9 @@
 
 (defn main-panel []
   [:div#main.container.text-center
-   [:h1.title "Echo"]
+   [:div.title.row
+    [:div.col-12
+     [:h1.title.display-1 "Echo"]]]
    (if @(rf/subscribe [::subs/lost?])
      [:div#lost
       [:div.row
@@ -20,19 +22,17 @@
       [:div.row.justify-content-center
        [:div.col-2
         [:div [:label.col-form-label {:for "n"} "N"]]
-        (let [n (rf/subscribe [::subs/n])]
-          [:div {:class (cond
-                          @(rf/subscribe [::subs/flash-n?]) "flash form-control"
-                          :default "form-control")} @n])]
+        [:div {:class (cond
+                        @(rf/subscribe [::subs/flash-n?]) "flash form-control"
+                        :default "unflashed form-control")} @(rf/subscribe [::subs/n])]]
        [:div.col-2
         [:label.col-form-label {:for "score"} "Score"]
-        (let [score (rf/subscribe [::subs/score])]
-          [:div {:class (cond
-                          @(rf/subscribe [::subs/flash-score?]) "flash form-control"
-                          :default "form-control")} @score])]]
+        [:div {:class (cond
+                        @(rf/subscribe [::subs/flash-score?]) "flash form-control"
+                        :default "unflashed form-control")} @(rf/subscribe [::subs/score])]]]
       (let [cur (rf/subscribe [::subs/cur])]
         [:div.row.justify-content-center
-         [:div#gameValue.col-6.btn.btn>h1 {:class (cond
+         [:div#gameValue.col-2.btn.display-1.btn>h1 {:class (cond
                                                     @(rf/subscribe [::subs/fade?]) "faded"
                                                     :default "new")
                                            :onClick #(rf/dispatch [::events/click])}

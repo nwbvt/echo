@@ -1,9 +1,9 @@
 :root {
-  --bs-body-color: #F27127; 
-  --bs-body-bg: #260101;
-  --bs-secondary-color: #F28A2E;
-  --bs-border-color: #A62F03;
-  --bs-emphasis-color: #AB0E21;
+  --bs-body-color: #BC3908; 
+  --bs-body-bg: #220901;
+  --bs-secondary-color: #941B0C;
+  --bs-border-color: #621708;
+  --bs-emphasis-color: #F6AA1C;
 }
 
 div#gameValue h1.new {
@@ -23,10 +23,14 @@ div#gameValue h1.clicked {
   color: var(--bs-emphasis-color);
 }
 
-div.flash
-{
+div.flash {
   color: var(--bs-emphasis-color);
   font-weight: bold;
+  transition: color 1s linear;
+  transition: font-weight 1s linear;
+}
+
+div.unflashed {
   transition: color 1s linear;
   transition: font-weight 1s linear;
 }

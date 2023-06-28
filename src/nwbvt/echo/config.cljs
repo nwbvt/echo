@@ -6,13 +6,9 @@
 (def defaults
   {:is-n 0.25
    :is-recent 0.25
-   :options (range 100)
-   :points-per-level 5
+   :options '(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z)
+   :points-per-level 10
    :period 2000})
-
-(comment (defstate env
-  :start (do
-           (merge defaults args))))
 
 (def env
   defaults)
