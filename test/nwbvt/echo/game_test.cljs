@@ -7,8 +7,8 @@
   (testing "general probabilities"
     (let [options (range 101)
           s '(0 1 2 3 4 5)
-          n 2
-          results (for [_ (range 100004)] (game/choose-next s options n 0.1 0.6))
+          window 2
+          results (for [_ (range 100004)] (game/choose-next s options window 0.1 0.6))
           by-result (frequencies results)]
       ;; Expected distribution
       ;; 10% - 1, 10000 times
@@ -23,14 +23,14 @@
   (testing "Early sequences"
     (let [options (range 10)
           s '(1)
-          n 2
-          results (for [_ (range 10000)] (game/choose-next s options n 0.1 0.4))]
+          window 2
+          results (for [_ (range 10000)] (game/choose-next s options window 0.1 0.4))]
       (is (= (set (range 10)) (set results)))))
   (testing "Repeats"
     (let [options (range 100)
           s `(1 1 1 1)
-          n 2]
-      (is (int? (game/choose-next s options n 0.1 0.4))))))
+          window 2]
+      (is (int? (game/choose-next s options window 0.1 0.4))))))
 
 (deftest test-is-echo?
   (testing "positives"

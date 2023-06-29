@@ -21,10 +21,10 @@
      [:div#game
       [:div.row.justify-content-center
        [:div.col-2
-        [:div [:label.col-form-label {:for "n"} "N"]]
+        [:div [:label.col-form-label {:for "window"} "Window"]]
         [:div {:class (cond
-                        @(rf/subscribe [::subs/flash-n?]) "flash form-control"
-                        :default "unflashed form-control")} @(rf/subscribe [::subs/n])]]
+                        @(rf/subscribe [::subs/flash-window?]) "flash form-control"
+                        :default "unflashed form-control")} @(rf/subscribe [::subs/window])]]
        [:div.col-2
         [:label.col-form-label {:for "score"} "Score"]
         [:div {:class (cond

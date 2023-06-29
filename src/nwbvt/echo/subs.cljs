@@ -3,14 +3,9 @@
    [re-frame.core :as rf]))
 
 (rf/reg-sub
-  ::name
-  (fn [db]
-    (:name db)))
-
-(rf/reg-sub
- ::n
+ ::window
  (fn [db]
-   (:n db)))
+   (:window db)))
 
 (rf/reg-sub
   ::cur
@@ -48,6 +43,6 @@
     (:score (:flash db))))
 
 (rf/reg-sub
-  ::flash-n?
+  ::flash-window?
   (fn [db]
-    (:n (:flash db))))
+    (:window (:flash db))))

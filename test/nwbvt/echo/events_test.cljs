@@ -4,7 +4,7 @@
 
 (deftest test-tick
   (let [game-id #uuid "00000000-0000-0000-1337-000000000000"
-        config {:is-n? 0.1
+        config {:is-echo? 0.1
                 :is-recent? 0.4
                 :options (range 10)
                 :points-per-level 10
@@ -12,11 +12,11 @@
         echo-state {:s '(0 1 0 2 3 4)
                     :running? true
                     :game-id game-id
-                    :n 2}
+                    :window 2}
         no-echo-state {:s '(0 1 2 3 4)
                        :running? true
                        :game-id game-id
-                       :n 2}]
+                       :window 2}]
     (testing "No echo"
       (let [next-state (events/tick no-echo-state config game-id)]
         (is (= '(0 1 2 3 4)
@@ -49,11 +49,11 @@
     ))
 
 (deftest test-click
-  (let [config {:is-n? 0.1
+  (let [config {:is-echo? 0.1
                 :is-recent? 0.4
                 :options (range 10)
                 :points-per-level 10}
-        base-state {:n 2
+        base-state {:window 2
                     :score 3}]
     (testing "After echo"
       (is (= (events/click (assoc base-state :s '(0 1 0 2 3 4)))

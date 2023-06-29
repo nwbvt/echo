@@ -13,12 +13,12 @@
 
 (defn tick
   "Perform a tick"
-  [{:keys [s n scored? running? game-id] :as db}
-   {:keys [is-n is-recent options period]}
+  [{:keys [s window scored? running? game-id] :as db}
+   {:keys [is-echo is-recent options period]}
    game]
   (if (and running? (= game game-id))
-    (let [echo? (game/is-echo? s n)
-          new-seq (conj s (game/choose-next s options n is-n is-recent))
+    (let [echo? (game/is-echo? s window)
+          new-seq (conj s (game/choose-next s options window is-echo is-recent))
           lost? (and (not scored?) echo?)]
     {:db (assoc db
                 :s new-seq
@@ -37,8 +37,8 @@
     (tick db config/env game-id)))
 
 (defn click
-  [{:keys [s n]}]
-  {:dispatch [(if (game/is-echo? s n)
+  [{:keys [s window]}]
+  {:dispatch [(if (game/is-echo? s window)
                 ::score
                 ::game-over)]})
 
@@ -64,9 +64,9 @@
     (score db config/env)))
 
 (defn advance
-  [{:keys [n] :as db}]
-  {:db (assoc db :n (inc n))
-   :dispatch [::flash :n]})
+  [{:keys [window] :as db}]
+  {:db (assoc db :window (inc window))
+   :dispatch [::flash :window]})
 
 (rf/reg-event-fx
   ::advance
@@ -84,7 +84,7 @@
                   :lost? false
                   :score 0
                   :fade? false
-                  :n 2)
+                  :window 2)
        :dispatch-later {:ms (:period config/env) :dispatch [::tick game-id]}})))
 
 (rf/reg-event-fx
