@@ -6,19 +6,26 @@
   --bs-emphasis-color: #F6AA1C;
 }
 
+div.title {
+  font-family: palatino;
+}
+
+div#gameValue {
+  font-family: georgia;
+}
+
 div#gameValue h1.new {
-  font-size: 4em;
   opacity: 1;
+  font-size: 8em;
 }
 
 div#gameValue h1.faded {
-  font-size: 4em;
   opacity: 0.5;
+  font-size: 8em;
   transition: opacity 1.5s linear;
 }
 
 div#gameValue h1.clicked {
-  font-size: 4em;
   opacity: 1;
   color: var(--bs-emphasis-color);
 }
@@ -26,11 +33,11 @@ div#gameValue h1.clicked {
 div.flash {
   color: var(--bs-emphasis-color);
   font-weight: bold;
-  transition: color 1s linear;
-  transition: font-weight 1s linear;
+  transition: all 0.5s ease;
 }
 
 div.unflashed {
-  transition: color 1s linear;
-  transition: font-weight 1s linear;
+  color: var(--bs-body-color);
+  font-weight: normal;
+  transition: all 5s ease;
 }

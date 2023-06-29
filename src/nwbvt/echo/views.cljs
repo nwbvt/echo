@@ -13,10 +13,10 @@
      [:div#lost
       [:div.row
        [:div.col
-        [:h2 "Sorry you lose"]]]  
+        [:h1 "Game Over"]]]
       [:div.row
        [:div.col
-        [:h3 "Final score: " @(rf/subscribe [::subs/score])]]]])
+        [:h2 "Final score: " @(rf/subscribe [::subs/score])]]]])
    (if @(rf/subscribe [::subs/running?])
      [:div#game
       [:div.row.justify-content-center
@@ -31,10 +31,12 @@
                         @(rf/subscribe [::subs/flash-score?]) "flash form-control"
                         :default "unflashed form-control")} @(rf/subscribe [::subs/score])]]]
       (let [cur (rf/subscribe [::subs/cur])]
-        [:div.row.justify-content-center
-         [:div#gameValue.col-2.btn.display-1.btn>h1 {:class (cond
-                                                    @(rf/subscribe [::subs/fade?]) "faded"
-                                                    :default "new")
-                                           :onClick #(rf/dispatch [::events/click])}
-          (or @cur "Get Ready!")]])]
+        (if @cur
+          [:div.row.justify-content-center
+           [:div#gameValue.col-2.btn.display-1.btn>h1 {:class (cond
+                                                                @(rf/subscribe [::subs/fade?]) "faded"
+                                                                :default "new")
+                                                       :onClick #(rf/dispatch [::events/click])}
+            @cur]]
+          [:h2 "Get Ready!"]))]
      [:button.btn.btn-primary {:onClick #(rf/dispatch [::events/start])} "Start" ]) ])
