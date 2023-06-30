@@ -8,7 +8,8 @@
                 :is-recent? 0.4
                 :options (range 10)
                 :points-per-level 10
-                :period 3000}
+                :period 3000
+                :clip-multiple 2}
         echo-state {:s '(0 1 0 2 3 4)
                     :running? true
                     :game-id game-id
@@ -19,7 +20,7 @@
                        :window 2}]
     (testing "No echo"
       (let [next-state (events/tick no-echo-state config game-id)]
-        (is (= '(0 1 2 3 4)
+        (is (= '(0 1 2 3)
                (-> next-state
                    :db
                    :s
@@ -29,7 +30,7 @@
                (:fx next-state)))))
     (testing "score, echo"
       (let [next-state (events/tick (assoc echo-state :scored? true) config game-id)]
-        (is (= '(0 1 0 2 3 4)
+        (is (= '(0 1 0 2)
                (-> next-state
                    :db
                    :s

@@ -15,11 +15,12 @@
 (defn tick
   "Perform a tick"
   [{:keys [s window scored? running? game-id] :as db}
-   {:keys [is-echo is-recent options period]}
+   {:keys [is-echo is-recent options period clip-multiple]}
    game]
   (if (and running? (= game game-id))
     (let [echo? (game/is-echo? s window)
-          new-seq (conj s (game/choose-next s options window is-echo is-recent))
+          new-seq (game/advance-sequence s options window
+                                         is-echo is-recent clip-multiple)
           lost? (and (not scored?) echo?)]
     {:db (assoc db
                 :s new-seq

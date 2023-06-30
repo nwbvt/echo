@@ -5,10 +5,10 @@
 
 (deftest test-choose-next
   (testing "general probabilities"
-    (let [options (range 101)
-          s '(0 1 2 3 4 5)
+    (let [options (range 104)
+          s '(0 1 2 3)
           window 2
-          results (for [_ (range 100004)] (game/choose-next s options window 0.1 0.6))
+          results (for [_ (range 100000)] (game/choose-next s options window 0.1 0.6))
           by-result (frequencies results)]
       ;; Expected distribution
       ;; 10% - 1, 10000 times
@@ -18,8 +18,7 @@
       (is (spec/int-in-range? 19500 21500 (by-result 0)))
       (is (spec/int-in-range? 19500 21500 (by-result 2)))
       (is (spec/int-in-range? 19500 21500 (by-result 3)))
-      (is (spec/int-in-range? 200 400 (by-result 4)))
-      ))
+      (is (spec/int-in-range? 200 400 (by-result 4)))))
   (testing "Early sequences"
     (let [options (range 10)
           s '(1)
@@ -31,6 +30,13 @@
           s `(1 1 1 1)
           window 2]
       (is (int? (game/choose-next s options window 0.1 0.4))))))
+
+(deftest advance-sequence
+  (testing "advancing sequence"
+    (let [advanced (game/advance-sequence '(0 1 2 3 4) (range 100) 2 1 0 2)]
+      (is (= '(1 0 1 2 3) advanced)))
+    (let [advanced (game/advance-sequence '(0 1 2) (range 100) 2 1 0 2)]
+      (is (= '(1 0 1 2) advanced)))))
 
 (deftest test-is-echo?
   (testing "positives"

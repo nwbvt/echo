@@ -8,7 +8,8 @@
    :is-recent 0.25
    :options '(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z)
    :points-per-level 10
-   :period 2000})
+   :period 2000
+   :clip-multiple 3})
 
 (def env
   defaults)
