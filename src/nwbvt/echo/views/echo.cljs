@@ -26,7 +26,11 @@
          [:h1 "Game Over"]]]
        [:div.row
         [:div.col
-         [:h2 "Final score: " @(rf/subscribe [::subs/score])]]]])  
+         [:h2 "Final score: " @(rf/subscribe [::subs/score])]]]
+       (case @(rf/subscribe [::subs/vs-high])
+         0 [:div.row>div.col>h2 "You have tied your high score!"]
+         1 [:div.row>div.col>h2 "You have a new high score!"]
+         [:div.row>div.col>h3 "High score: " @(rf/subscribe [::subs/high-score])])])
     (if @(rf/subscribe [::subs/running?])
       [:div#game
        [:div.row.justify-content-center

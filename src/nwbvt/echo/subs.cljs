@@ -46,3 +46,13 @@
   ::flash-window?
   (fn [db]
     (:window (:flash db))))
+
+(rf/reg-sub
+  ::high-score
+  (fn [db]
+    (:high-score db)))
+
+(rf/reg-sub
+  ::vs-high
+  (fn [db]
+    (:vs-high db)))

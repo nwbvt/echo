@@ -3,13 +3,14 @@
    [re-frame.core :as rf]
    [nwbvt.echo.db :as db]
    [nwbvt.echo.config :as config]
-   [nwbvt.echo.game :as game]
-   [day8.re-frame.tracing :refer-macros [fn-traced]]))
+   [nwbvt.echo.game :as game]))
 
-(rf/reg-event-db
+(rf/reg-event-fx
  ::initialize-db
- (fn-traced [_ _]
-   db/default-db))
+ [(rf/inject-cofx :high-score)]
+ (fn [{:keys [high-score]} _]
+   {:db (assoc db/default-db
+               :high-score high-score)}))
 
 (defn tick
   "Perform a tick"
@@ -48,18 +49,25 @@
     (click db)))
 
 (defn score
-  [{:keys [score] :as db}
+  [{:keys [high-score score] :as db}
    {:keys [points-per-level]}]
   (let [new-score (inc score)]
       {:db (assoc db
                   :scored? true
-                  :score (inc score))
+                  :score (inc score)
+                  :high-score (max high-score score)
+                  :vs-high (compare score high-score))
        :fx [(if (zero? (mod new-score points-per-level))
               [:dispatch [::advance]])
             [:dispatch [::flash :score]]]}))
 
+(defn save-score-interceptor
+  [{score :score}]
+  (db/save-score score))
+
 (rf/reg-event-fx
   ::score
+  [(rf/after save-score-interceptor)]
   (fn [{db :db} event]
     (score db config/env)))
 
@@ -83,6 +91,7 @@
                   :game-id game-id
                   :lost? false
                   :score 0
+                  :vs-high -1
                   :fade? false
                   :window 2)
        :dispatch-later {:ms (:period config/env) :dispatch [::tick game-id]}})))
