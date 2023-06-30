@@ -1,0 +1,43 @@
+:root {
+  --bs-body-color: #BC3908; 
+  --bs-body-bg: #220901;
+  --bs-secondary-color: #941B0C;
+  --bs-border-color: #621708;
+  --bs-emphasis-color: #F6AA1C;
+}
+
+div.title {
+  font-family: palatino;
+}
+
+div#gameValue {
+  font-family: georgia;
+}
+
+div#gameValue h1.new {
+  opacity: 1;
+  font-size: 8em;
+}
+
+div#gameValue h1.faded {
+  opacity: 0.5;
+  font-size: 8em;
+  transition: opacity 1.5s linear;
+}
+
+div#gameValue h1.clicked {
+  opacity: 1;
+  color: var(--bs-emphasis-color);
+}
+
+div.flash {
+  color: var(--bs-emphasis-color);
+  font-weight: bold;
+  transition: all 0.5s ease;
+}
+
+div.unflashed {
+  color: var(--bs-body-color);
+  font-weight: normal;
+  transition: all 5s ease;
+}
