@@ -1,4 +1,4 @@
-# nwbvt.echo
+# Echo
 
 [Echo](https://nwbvt.github.io/echo/) is a game based on the classic [n-back](https://en.wikipedia.org/wiki/N-back) cognitive performance task.
 
@@ -12,6 +12,7 @@ For instance if the window is 2 and you get the following sequence...
 - C
 - D
 - C
+
 You would click on the second *C*.
 
 Each correct echo identification earns you a point. If you either miss and echo or falsely identify one you lose the game.
