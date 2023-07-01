@@ -50,17 +50,19 @@
     (click db)))
 
 (defn score
-  [{:keys [high-score score] :as db}
+  [{:keys [high-score score scored?] :as db}
    {:keys [points-per-level]}]
-  (let [new-score (inc score)]
+  (if scored?
+    {}
+    (let [new-score (inc score)]
       {:db (assoc db
                   :scored? true
-                  :score (inc score)
-                  :high-score (max high-score score)
-                  :vs-high (compare score high-score))
+                  :score new-score
+                  :high-score (max high-score new-score)
+                  :vs-high (compare new-score high-score))
        :fx [(if (zero? (mod new-score points-per-level))
               [:dispatch [::advance]])
-            [:dispatch [::flash :score]]]}))
+            [:dispatch [::flash :score]]]})))
 
 (defn save-score-interceptor
   [{score :score}]

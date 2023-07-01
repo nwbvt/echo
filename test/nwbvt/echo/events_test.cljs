@@ -46,8 +46,7 @@
     (testing "old game"
       (let [next-state (events/tick (assoc echo-state :scored? false) config
                                     #uuid "12345678-0000-0000-0000-00000000000")]
-        (is (= nil next-state))))
-    ))
+        (is (= nil next-state))))))
 
 (deftest test-click
   (let [config {:is-echo? 0.1
@@ -62,3 +61,29 @@
     (testing "After no echo"
       (is (= (events/click (assoc base-state :s '(0 1 2 3 4)))
              {:dispatch [::events/game-over]})))))
+
+(deftest test-score
+  (testing "Scoring"
+    (is (= {:db {:scored? true :score 4 :high-score 8 :vs-high -1}
+            :fx [nil [:dispatch [:nwbvt.echo.events/flash :score]]]}
+           (events/score {:score 3 :high-score 8}
+                         {:points-per-level 10}))))
+  (testing "Leveling up"
+    (is (= {:db {:scored? true :score 10 :high-score 18 :vs-high -1}
+            :fx [[:dispatch [:nwbvt.echo.events/advance]] [:dispatch [:nwbvt.echo.events/flash :score]]]}
+           (events/score {:score 9 :high-score 18}
+                         {:points-per-level 10}))))
+  (testing "Tie high score"
+    (is (= {:db {:scored? true :score 18 :high-score 18 :vs-high 0}
+            :fx [nil [:dispatch [:nwbvt.echo.events/flash :score]]]}
+           (events/score {:score 17 :high-score 18}
+                         {:points-per-level 10}))))
+  (testing "Beat high score"
+    (is (= {:db {:scored? true :score 19 :high-score 19 :vs-high 1}
+            :fx [nil [:dispatch [:nwbvt.echo.events/flash :score]]]}
+           (events/score {:score 18 :high-score 18}
+                         {:points-per-level 10}))))
+  (testing "Double click"
+    (is (= {}
+           (events/score {:scored? true :score 8 :high-score 18}
+                         {:points-per-level 10})))))
