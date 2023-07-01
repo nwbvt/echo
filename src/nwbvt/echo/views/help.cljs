@@ -13,7 +13,7 @@
                           :aria-label "Close"}]]
      [:div.modal-body.help-text
       [:div.container.text-left
-       [:p "Echo is based on the classic " [:a {:href "https://en.wikipedia.org/wiki/N-back" :target "_blank"} "N-Back"] " game."]
+       [:p "Echo is based on the classic " [:a {:href "https://en.wikipedia.org/wiki/N-back" :target "_blank"} "N-Back"] " cognitive performance task."]
        [:p "You will be presented with a sequence of characters. You will also have a window size, starting at 2."
         "Your job will be to remember the characters in that window and if the current character is the one at the start of that window, click on it."]
        [:p "For instance if the window is 2 and you get the following sequence..."]
